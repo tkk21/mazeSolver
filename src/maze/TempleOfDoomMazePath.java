@@ -1,0 +1,145 @@
+package maze;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+
+/**
+ * 
+ * @author ted
+ *
+ */
+public class TempleOfDoomMazePath {
+
+	/**
+	 * function shortestPlankPath(mazeArr, entrance, exit)
+	 * these inputs collectively tell about 
+	 * the size of the pillar grid and the plank layout*/
+	public List<MazeNode> shortestPlankPath(Maze maze, Coordinate entrance, 
+			Coordinate exit){
+
+		//check for invalid set size for entrance and exit . entrance and exit are tuples containing the integer coordinate
+		if (!areWithinBounds(entrance, exit, maze)){
+			return null;
+		}
+		//minPath   BFS on the current mazeArr . path can be implemented as a list of integer tuples
+		List<MazeNode> minPath = breadthFirstSearch(maze, entrance, exit);
+		//toVisit   a queue that stores the nodes to visit
+		Queue<MazeNode> toVisit = new LinkedList<MazeNode>();
+		//add the start node to the toVisit queue
+		toVisit.add(maze.getNode(entrance));
+		//while toVisit is not empty do
+		while (!toVisit.isEmpty()){
+			MazeNode node = toVisit.poll();
+			//node:visited   true
+			node.setVisited(true);
+			//for all direction not yet checked in node do
+			for (MazeDirection direction : MazeDirection.values()){
+//				if (checkPlankPlacement(maze, toVisitCoord, direction)){
+//					
+//				}
+			}
+//			if (checkPlankPlacement(maze, toVisitNode, direction)){
+//				
+//			}
+			//mazeArrPlank   copy the mazeArr
+			//mazeArrPlank   put plank down in the direction
+			//plankPath   BFS on that copy of mazeArr
+			//if plankPath != null and (minPath == null or length of plankPath < length of minPath ) then . BFS
+			//returns null if there is no path to the exit
+			//minPath   plankPath
+			//else
+			//add toV isitNode to the toVisit queue
+		}
+		//return minPath
+		return minPath;
+	}
+
+
+	private boolean areWithinBounds(Coordinate entrance, Coordinate exit, Maze maze) {
+		return maze.isWithinBounds(entrance) && maze.isWithinBounds(exit);
+	}
+
+
+	private List<MazeNode> breadthFirstSearch(Maze maze, Coordinate entrance,
+			Coordinate exit){
+		List <MazeNode> minPath = new ArrayList<MazeNode>();
+		Queue <MazeNode> queue = new LinkedList<MazeNode>();
+		HashMap <MazeNode, MazeNode> prevMap = new HashMap<MazeNode, MazeNode>();
+		queue.add(maze.getNode(entrance));
+		while (!queue.isEmpty()){
+			MazeNode node = queue.poll();
+			if (node.getCoordinate().equals(exit)){
+				//create minPath out of prevs
+				createMinPath(minPath, prevMap, node);
+				return minPath;
+			}
+			addAdjacentPlanksToQueue(maze, queue, prevMap, node);
+		}
+		return null;
+	}
+
+
+	private void createMinPath(List<MazeNode> minPath,
+			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
+		MazeNode trav = node;
+		while (trav != null){
+			minPath.add(trav);
+			trav = prevMap.get(trav);
+		}
+		//this is done since inserting front for ArrayList takes O(N) time for each element
+		//that totals to O(N^2) for N elements
+		Collections.reverse(minPath);
+	}
+
+
+	private void addAdjacentPlanksToQueue(Maze maze, Queue<MazeNode> queue,
+			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
+		MazeNode toPut;
+		if (node.hasUp()){
+			toPut = maze.getNode(node.getCoordinate().getUpCoordinate());
+			prevMap.put(toPut, node);
+			queue.add(toPut);
+		}
+		if (node.hasDown()){
+			toPut = maze.getNode(node.getCoordinate().getDownCoordinate());
+			prevMap.put(toPut, node);
+			queue.add(toPut);
+		}
+		if (node.hasLeft()){
+			toPut = maze.getNode(node.getCoordinate().getLeftCoordinate());
+			prevMap.put(toPut, node);
+			queue.add(toPut);
+		}
+		if (node.hasRight()){
+			toPut = maze.getNode(node.getCoordinate().getRightCoordinate());
+			prevMap.put(toPut, node);
+			queue.add(toPut);
+		}
+	}
+	
+	private void placePlank(Maze maze, MazeNode source){
+
+		if (checkPlankPlacement(maze, source.getCoordinate().getUpCoordinate(), MazeDirection.up)){
+			
+		}
+	}
+	private boolean checkPlankPlacement(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
+		boolean canPlace = true;//using this variable to closely resemble the pseudocode
+		MazeNode toVisit = maze.getNode(toVisitCoord);
+		//if the direction does not lead to node inside the mazeArr then
+		//continue
+		canPlace &= maze.isWithinBounds(toVisitCoord);
+		//if toVisitNode:visited == true then
+		//continue
+		canPlace &= !toVisit.isVisited();
+		//if direction == false then
+		canPlace &= toVisit.hasLadder(direction);
+		return canPlace;
+	}
+}
