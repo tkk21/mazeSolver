@@ -155,23 +155,8 @@ public class MazePathSolver {
 	private void addAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
 			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
 		MazeNode toPut;
-		if (node.hasUp()){
-			toPut = maze.getNode(node.getCoordinate().getUpCoordinate());
-			prevMap.put(toPut, node);
-			queue.add(toPut);
-		}
-		if (node.hasDown()){
-			toPut = maze.getNode(node.getCoordinate().getDownCoordinate());
-			prevMap.put(toPut, node);
-			queue.add(toPut);
-		}
-		if (node.hasLeft()){
-			toPut = maze.getNode(node.getCoordinate().getLeftCoordinate());
-			prevMap.put(toPut, node);
-			queue.add(toPut);
-		}
-		if (node.hasRight()){
-			toPut = maze.getNode(node.getCoordinate().getRightCoordinate());
+		for (MazeDirection direction: MazeDirection.values()){
+			toPut = maze.getNode(node.getCoordinate().getAdjacentCoordinate(direction));
 			prevMap.put(toPut, node);
 			queue.add(toPut);
 		}
