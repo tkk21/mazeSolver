@@ -12,7 +12,7 @@ import java.util.Queue;
  * @author Ted Kim
  *
  */
-public class TempleOfDoomMazePath {
+public class MazePathSolver {
 
 	/**
 	 * function shortestPlankPath(mazeArr, entrance, exit)
@@ -54,7 +54,7 @@ public class TempleOfDoomMazePath {
 					//mazeArrPlank   copy the mazeArr
 					MazeBuilder mazeBuilder = new MazeBuilder(maze.size());
 					Maze mazeArrPlank;
-					mazeBuilder.copyExistingMaze(maze);
+					mazeBuilder.copyMaze(maze);
 					//mazeArrPlank   put plank down in the direction
 					mazeBuilder.placeLadder(direction, node.getCoordinate());
 					mazeArrPlank = mazeBuilder.toMaze();

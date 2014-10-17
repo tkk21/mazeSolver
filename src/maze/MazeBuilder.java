@@ -32,15 +32,15 @@ public class MazeBuilder {
 		if (!maze.withinBounds(destination)){
 			return;
 		}
-		maze.getNode(source).putDownLadder(direction);
-		maze.getNode(destination).putDownLadder(direction.opposite());
+		maze.getNode(source).placeLadder(direction);
+		maze.getNode(destination).placeLadder(direction.opposite());
 	}
 	
 	/**
 	 * copies the nodes from an existing maze to this builder
 	 * @param copy	the maze to copy
 	 */
-	public void copyExistingMaze(Maze copy){
+	public void copyMaze(Maze copy){
 		for (int x = 0;x<copy.size();x++){
 			for (int y = 0;y<copy.size();y++){
 				Coordinate coordinate = new Coordinate(x, y);

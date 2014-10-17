@@ -94,7 +94,7 @@ public class MazeNode {
 	 * puts down the ladder in the direction specified
 	 * @param direction	the direction to specify
 	 */
-	public void putDownLadder (MazeDirection direction){
+	public void placeLadder (MazeDirection direction){
 		switch(direction){
 		case up:
 			setUp(true);
