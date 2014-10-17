@@ -27,8 +27,13 @@ public class MazeBuilder {
 	 * @param direction	the direction to put down the ladder
 	 * @param source	the node the ladder is being put down from
 	 */
-	public void putDownLadder(MazeDirection direction, Coordinate source){
-		tryToPutDownLadder(source, source.getAdjacentCoordinate(direction), direction);
+	public void placeLadder(MazeDirection direction, Coordinate source){
+		Coordinate destination = source.getAdjacentCoordinate(direction);
+		if (!maze.withinBounds(destination)){
+			return;
+		}
+		maze.getNode(source).putDownLadder(direction);
+		maze.getNode(destination).putDownLadder(direction.opposite());
 	}
 	
 	/**
@@ -62,20 +67,5 @@ public class MazeBuilder {
 				maze.setNode(coordinate, new MazeNode(coordinate));
 			}
 		}
-	}
-	
-	/**
-	 * a helper method that checks if the coordinate to put the ladder to is within bounds
-	 * and then puts down the ladder
-	 * @param from	the coordinate to put down the ladder from
-	 * @param to	the coordinate to put down the ladder to
-	 * @param direction	the direction to put down the ladder
-	 */
-	private void tryToPutDownLadder(Coordinate from, Coordinate to, MazeDirection direction){
-		if (!maze.isWithinBounds(to)){
-			return;
-		}
-		maze.getNode(from).putDownLadder(direction);
-		maze.getNode(to).putDownLadder(direction.opposite());
 	}
 }
