@@ -113,7 +113,7 @@ public class TempleOfDoomMazePath {
 			MazeNode node = queue.poll();
 			if (node.getCoordinate().equals(exit)){
 				//create minPath out of prevs
-				createMinPath(minPath, prevMap, node);
+				minPath = createMinPath(prevMap, node);
 				return minPath;
 			}
 			addAdjacentPlanksToQueue(maze, queue, prevMap, node);
@@ -127,13 +127,15 @@ public class TempleOfDoomMazePath {
 	 * @param prevMap
 	 * @param node
 	 */
-	private void createMinPath(List<MazeNode> minPath,
-			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
+	private List<MazeNode> createMinPath(HashMap<MazeNode, MazeNode> prevMap, 
+			MazeNode node) {
+		List<MazeNode> minPath = new ArrayList<MazeNode>();
 		MazeNode trav = node;
 		while (trav != null){
 			minPath.add(trav);
 			trav = prevMap.get(trav);
 		}
+		return minPath;
 	}
 
 
