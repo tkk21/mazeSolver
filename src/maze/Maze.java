@@ -54,7 +54,7 @@ public class Maze {
 	 * @param coordinate	the coordinate to check
 	 * @return	if the coordinate is within the bounds of the maze or not
 	 */
-	public boolean isWithinBounds (Coordinate coordinate){
+	public boolean withinBounds (Coordinate coordinate){
 		return coordinate.isFirstQuadrant() && 
 				coordinate.getX()<size() && 
 				coordinate.getY()<size();

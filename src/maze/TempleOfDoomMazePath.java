@@ -30,7 +30,7 @@ public class TempleOfDoomMazePath {
 			Coordinate exit){
 
 		//check for invalid set size for entrance and exit //entrance and exit are tuples containing the integer coordinate
-		if (!areWithinBounds(entrance, exit, maze)){
+		if (!canBeComplete(entrance, exit, maze)){
 			return null;
 		}
 		//minPath   BFS on the current mazeArr . path can be implemented as a list of integer tuples
@@ -56,7 +56,7 @@ public class TempleOfDoomMazePath {
 					Maze mazeArrPlank;
 					mazeBuilder.copyExistingMaze(maze);
 					//mazeArrPlank   put plank down in the direction
-					mazeBuilder.putDownLadder(direction, node.getCoordinate());
+					mazeBuilder.placeLadder(direction, node.getCoordinate());
 					mazeArrPlank = mazeBuilder.toMaze();
 					
 					//plankPath   BFS on that copy of mazeArr
@@ -91,8 +91,8 @@ public class TempleOfDoomMazePath {
 	 * @param maze	the maze to check
 	 * @return
 	 */
-	private boolean areWithinBounds(Coordinate entrance, Coordinate exit, Maze maze) {
-		return maze.isWithinBounds(entrance) && maze.isWithinBounds(exit);
+	private boolean canBeComplete(Coordinate entrance, Coordinate exit, Maze maze) {
+		return maze.withinBounds(entrance) && maze.withinBounds(exit);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class TempleOfDoomMazePath {
 				minPath = createMinPath(prevMap, node);
 				return minPath;
 			}
-			addAdjacentPlanksToQueue(maze, queue, prevMap, node);
+			addAdjacentPlanks(maze, queue, prevMap, node);
 		}
 		return null;
 	}
@@ -145,7 +145,7 @@ public class TempleOfDoomMazePath {
 	 * @param prevMap	a map to record the planks taken
 	 * @param node	the source node to check adjacents of
 	 */
-	private void addAdjacentPlanksToQueue(Maze maze, Queue<MazeNode> queue,
+	private void addAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
 			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
 		MazeNode toPut;
 		if (node.hasUp()){
@@ -182,7 +182,7 @@ public class TempleOfDoomMazePath {
 		MazeNode toVisit = maze.getNode(toVisitCoord);
 		//if the direction does not lead to node inside the mazeArr then
 		//continue	
-		canPlace &= maze.isWithinBounds(toVisitCoord);
+		canPlace &= maze.withinBounds(toVisitCoord);
 		//if toVisitNode:visited == true then
 		//continue
 		canPlace &= !toVisit.isVisited();
