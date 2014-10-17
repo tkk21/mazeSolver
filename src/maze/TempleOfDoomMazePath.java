@@ -76,16 +76,33 @@ public class TempleOfDoomMazePath {
 				}
 			}
 		}
+
+		//this is done since inserting front for ArrayList takes O(N) time for each element
+		//that totals to O(N^2) for N elements
+		Collections.reverse(minPath);
 		//return minPath
 		return minPath;
 	}
 
-
+	/**
+	 * checks if the entrance and exit are actually in the maze
+	 * @param entrance	the coordinate of the entrance
+	 * @param exit	the coordinate of the exit
+	 * @param maze	the maze to check
+	 * @return
+	 */
 	private boolean areWithinBounds(Coordinate entrance, Coordinate exit, Maze maze) {
 		return maze.isWithinBounds(entrance) && maze.isWithinBounds(exit);
 	}
 
-
+	/**
+	 * does a breadth first search on the maze
+	 * to find the shortest path 
+	 * @param maze	the maze to traverse
+	 * @param entrance	the coordinate of the entrance
+	 * @param exit	the coordinate of the exit
+	 * @return	the ordered list representing the path
+	 */
 	private List<MazeNode> breadthFirstSearch(Maze maze, Coordinate entrance,
 			Coordinate exit){
 		List <MazeNode> minPath = new ArrayList<MazeNode>();
@@ -104,7 +121,12 @@ public class TempleOfDoomMazePath {
 		return null;
 	}
 
-
+	/**
+	 * creates 
+	 * @param minPath
+	 * @param prevMap
+	 * @param node
+	 */
 	private void createMinPath(List<MazeNode> minPath,
 			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
 		MazeNode trav = node;
@@ -112,9 +134,6 @@ public class TempleOfDoomMazePath {
 			minPath.add(trav);
 			trav = prevMap.get(trav);
 		}
-		//this is done since inserting front for ArrayList takes O(N) time for each element
-		//that totals to O(N^2) for N elements
-		Collections.reverse(minPath);
 	}
 
 
