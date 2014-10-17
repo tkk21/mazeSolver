@@ -95,6 +95,7 @@ public class MazeNode {
 	 * @param direction	the direction to specify
 	 */
 	public void placeLadder (MazeDirection direction){
+		ExceptionUtils.checkNulls(direction);
 		switch(direction){
 		case up:
 			setUp(true);
@@ -120,6 +121,7 @@ public class MazeNode {
 	 * @return
 	 */
 	public boolean hasLadder (MazeDirection direction){
+		ExceptionUtils.checkNulls(direction);
 		switch(direction){
 		case up:
 			return hasUp();
@@ -141,6 +143,7 @@ public class MazeNode {
 	 * @return	the copied node
 	 */
 	public static MazeNode copyNode (MazeNode node){
+		ExceptionUtils.checkNulls(node);
 		MazeNode newNode = new MazeNode(node.getCoordinate());
 		newNode.setUp(node.hasUp());
 		newNode.setDown(node.hasDown());

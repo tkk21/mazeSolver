@@ -28,6 +28,7 @@ public class MazeBuilder {
 	 * @param source	the node the ladder is being put down from
 	 */
 	public void placeLadder(MazeDirection direction, Coordinate source){
+		ExceptionUtils.checkNulls(direction, source);
 		Coordinate destination = source.getAdjacentCoordinate(direction);
 		if (!maze.withinBounds(destination)){
 			return;
@@ -41,6 +42,7 @@ public class MazeBuilder {
 	 * @param copy	the maze to copy
 	 */
 	public void copyMaze(Maze copy){
+		ExceptionUtils.checkNulls(copy);
 		for (int x = 0;x<copy.size();x++){
 			for (int y = 0;y<copy.size();y++){
 				Coordinate coordinate = new Coordinate(x, y);

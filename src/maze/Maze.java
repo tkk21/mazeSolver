@@ -29,6 +29,7 @@ public class Maze {
 	 * @return	the node at the coordinate
 	 */
 	public MazeNode getNode (Coordinate coordinate){
+		ExceptionUtils.checkNulls(coordinate);
 		return mazeArr[coordinate.getX()][coordinate.getY()];
 	}
 	
@@ -38,6 +39,7 @@ public class Maze {
 	 * @param node
 	 */
 	public void setNode (Coordinate coordinate, MazeNode node){
+		ExceptionUtils.checkNulls(coordinate, node);
 		mazeArr[coordinate.getX()][coordinate.getY()] = node;
 	}
 	
@@ -55,6 +57,7 @@ public class Maze {
 	 * @return	if the coordinate is within the bounds of the maze or not
 	 */
 	public boolean withinBounds (Coordinate coordinate){
+		ExceptionUtils.checkNulls(coordinate);
 		return coordinate.isFirstQuadrant() && 
 				coordinate.getX()<size() && 
 				coordinate.getY()<size();

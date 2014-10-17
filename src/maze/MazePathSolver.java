@@ -28,7 +28,8 @@ public class MazePathSolver {
 	 */
 	public List<MazeNode> shortestPlankPath(Maze maze, Coordinate entrance, 
 			Coordinate exit){
-
+		ExceptionUtils.checkNulls(maze, entrance, exit);
+		
 		//check for invalid set size for entrance and exit //entrance and exit are tuples containing the integer coordinate
 		if (!canBeComplete(entrance, exit, maze)){
 			return null;
