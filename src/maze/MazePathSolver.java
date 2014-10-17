@@ -48,9 +48,7 @@ public class MazePathSolver {
 			//for all direction not yet checked in node do
 			for (MazeDirection direction : MazeDirection.values()){
 				Coordinate toVisitCoordinate = node.getCoordinate().getAdjacentCoordinate(direction);
-				if (canPlacePlank(maze, 
-						toVisitCoordinate, 
-						direction)){
+				if (canPlacePlank(maze, toVisitCoordinate,direction)){
 					
 					//mazeArrPlank   copy the mazeArr
 					MazeBuilder mazeBuilder = new MazeBuilder(maze.size());
