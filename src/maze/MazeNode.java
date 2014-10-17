@@ -108,6 +108,21 @@ public class MazeNode {
 			return false;
 		}
 	}
+	
+	/**
+	 * returns a node with same planks and coordinate, but with cleared visited
+	 * @param node
+	 * @return
+	 */
+	public static MazeNode copyNode (MazeNode node){
+		MazeNode newNode = new MazeNode(node.getCoordinate());
+		newNode.setUp(node.hasUp());
+		newNode.setDown(node.hasDown());
+		newNode.setLeft(node.hasLeft());
+		newNode.setRight(node.hasRight());
+		newNode.visited = false;
+		return newNode;
+	}
 
 	/**
 	 * @param up the up to set

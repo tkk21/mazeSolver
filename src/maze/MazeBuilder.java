@@ -15,26 +15,16 @@ public class MazeBuilder {
 	 * @param source
 	 */
 	public void putDownLadder(MazeDirection direction, Coordinate source){
-		switch (direction){
-		case up:
-			tryToPutDownLadder(source, source.getUpCoordinate(), direction);
-			break;
-		case down:
-			tryToPutDownLadder(source, source.getDownCoordinate(), direction);
-			break;
-		case left:
-			tryToPutDownLadder(source, source.getLeftCoordinate(), direction);
-			break;
-		case right:
-			tryToPutDownLadder(source, source.getRightCoordinate(), direction);
-			break;
-		default:
-			System.out.println("This default case shouldn't happen");
-		}
+		tryToPutDownLadder(source, source.getAdjacentCoordinate(direction), direction);
 	}
 	
-	public void copyExistingMaze(Maze maze){
-		
+	public void copyExistingMaze(Maze copy){
+		for (int x = 0;x<copy.size();x++){
+			for (int y = 0;y<copy.size();y++){
+				Coordinate coordinate = new Coordinate(x, y);
+				maze.setNode(coordinate, MazeNode.copyNode(copy.getNode(coordinate)));
+			}
+		}
 	}
 	public Maze toMaze(){
 		return maze;

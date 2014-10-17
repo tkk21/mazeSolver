@@ -23,7 +23,7 @@ public class TempleOfDoomMazePath {
 	public List<MazeNode> shortestPlankPath(Maze maze, Coordinate entrance, 
 			Coordinate exit){
 
-		//check for invalid set size for entrance and exit . entrance and exit are tuples containing the integer coordinate
+		//check for invalid set size for entrance and exit //entrance and exit are tuples containing the integer coordinate
 		if (!areWithinBounds(entrance, exit, maze)){
 			return null;
 		}
@@ -40,21 +40,35 @@ public class TempleOfDoomMazePath {
 			node.setVisited(true);
 			//for all direction not yet checked in node do
 			for (MazeDirection direction : MazeDirection.values()){
-//				if (checkPlankPlacement(maze, toVisitCoord, direction)){
-//					
-//				}
+				Coordinate toVisitCoordinate = node.getCoordinate().getAdjacentCoordinate(direction);
+				if (checkPlankPlacement(maze, 
+						toVisitCoordinate, 
+						direction)){
+					
+					//mazeArrPlank   copy the mazeArr
+					MazeBuilder mazeBuilder = new MazeBuilder(maze.size());
+					Maze mazeArrPlank;
+					mazeBuilder.copyExistingMaze(maze);
+					//mazeArrPlank   put plank down in the direction
+					mazeBuilder.putDownLadder(direction, node.getCoordinate());
+					mazeArrPlank = mazeBuilder.toMaze();
+					
+					//plankPath   BFS on that copy of mazeArr
+					List<MazeNode> plankPath = breadthFirstSearch(mazeArrPlank, entrance, exit);
+					//if plankPath != null and (minPath == null or length of plankPath < length of minPath ) then
+					if (plankPath != null && (minPath == null || plankPath.size() < minPath.size())){//BFS returns null if there is no path to the exit
+						//minPath   plankPath
+						minPath = plankPath;
+					}
+					/**
+					 * Had to remove the else statement or else the pseudocode doesn't match the loop invariant
+					 * and thus is incorrect
+					 * Removal of else ensures that all of the maze states are examined
+					 */
+					//add toVisitNode to the toVisit queue
+					toVisit.add(maze.getNode(toVisitCoordinate));
+				}
 			}
-//			if (checkPlankPlacement(maze, toVisitNode, direction)){
-//				
-//			}
-			//mazeArrPlank   copy the mazeArr
-			//mazeArrPlank   put plank down in the direction
-			//plankPath   BFS on that copy of mazeArr
-			//if plankPath != null and (minPath == null or length of plankPath < length of minPath ) then . BFS
-			//returns null if there is no path to the exit
-			//minPath   plankPath
-			//else
-			//add toV isitNode to the toVisit queue
 		}
 		//return minPath
 		return minPath;
@@ -123,17 +137,11 @@ public class TempleOfDoomMazePath {
 		}
 	}
 	
-	private void placePlank(Maze maze, MazeNode source){
-
-		if (checkPlankPlacement(maze, source.getCoordinate().getUpCoordinate(), MazeDirection.up)){
-			
-		}
-	}
 	private boolean checkPlankPlacement(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
 		boolean canPlace = true;//using this variable to closely resemble the pseudocode
 		MazeNode toVisit = maze.getNode(toVisitCoord);
 		//if the direction does not lead to node inside the mazeArr then
-		//continue
+		//continue	
 		canPlace &= maze.isWithinBounds(toVisitCoord);
 		//if toVisitNode:visited == true then
 		//continue
