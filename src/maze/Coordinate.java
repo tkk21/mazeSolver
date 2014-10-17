@@ -84,6 +84,7 @@ public class Coordinate {
 	 * @return	a coordinate 1 to the direction specified
 	 */
 	public Coordinate getAdjacentCoordinate (MazeDirection direction){
+		ExceptionUtils.checkNulls(direction);
 		switch (direction){
 		case up:
 			return getUpCoordinate();
@@ -104,6 +105,9 @@ public class Coordinate {
 	@Override
 	public boolean equals(Object o){
 		Coordinate c = castToCoordinate(o);
+		if (c==null){
+			return false;
+		}
 		if (getX() == c.getX() && getY() == c.getY()){
 			return true;
 		}
