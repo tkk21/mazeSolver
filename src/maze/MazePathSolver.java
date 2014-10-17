@@ -48,7 +48,7 @@ public class MazePathSolver {
 			//for all direction not yet checked in node do
 			for (MazeDirection direction : MazeDirection.values()){
 				Coordinate toVisitCoordinate = node.getCoordinate().getAdjacentCoordinate(direction);
-				if (checkPlankPlacement(maze, 
+				if (canPlacePlank(maze, 
 						toVisitCoordinate, 
 						direction)){
 					
@@ -62,11 +62,7 @@ public class MazePathSolver {
 					
 					//plankPath   BFS on that copy of mazeArr
 					List<MazeNode> plankPath = breadthFirstSearch(mazeArrPlank, entrance, exit);
-					//if plankPath != null and (minPath == null or length of plankPath < length of minPath ) then
-					if (plankPath != null && (minPath == null || plankPath.size() < minPath.size())){//BFS returns null if there is no path to the exit
-						//minPath   plankPath
-						minPath = plankPath;
-					}
+					minPath = comparePath(minPath, plankPath);
 					/**
 					 * Had to remove the else statement or else the pseudocode doesn't match the loop invariant
 					 * and thus is incorrect
@@ -82,6 +78,16 @@ public class MazePathSolver {
 		//that totals to O(N^2) for N elements
 		Collections.reverse(minPath);
 		//return minPath
+		return minPath;
+	}
+
+	private List<MazeNode> comparePath(List<MazeNode> minPath,
+			List<MazeNode> plankPath) {
+		//if plankPath != null and (minPath == null or length of plankPath < length of minPath ) then
+		if (plankPath != null && (minPath == null || plankPath.size() < minPath.size())){//BFS returns null if there is no path to the exit
+			//minPath   plankPath
+			minPath = plankPath;
+		}
 		return minPath;
 	}
 
@@ -178,7 +184,7 @@ public class MazePathSolver {
 	 * @param direction	the specified direction
 	 * @return	true if plank can be placed, false otherwise
 	 */
-	private boolean checkPlankPlacement(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
+	private boolean canPlacePlank(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
 		boolean canPlace = true;//using this variable to closely resemble the pseudocode
 		MazeNode toVisit = maze.getNode(toVisitCoord);
 		//if the direction does not lead to node inside the mazeArr then
