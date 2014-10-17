@@ -1,25 +1,42 @@
 package maze;
 
+/**
+ * A class to define the nodes of the maze
+ * @author Ted Kim
+ *
+ */
 public class MazeNode {
 
 	//false if no plank exists, true if there is a plank
 	
+	/**boolean field to represent if there's a plank above this node*/
 	//boolean up
 	private boolean up;
+	/**boolean field to represent if there's a plank below this node*/
 	//boolean down
 	private boolean down;
+	/**boolean field to represent if there's a plank left of this node*/
 	//boolean left
 	private boolean left;
+	/**boolean field to represent if there's a plank right of this node*/
 	//boolean right
 	private boolean right;
+	/**boolean field to represent if this plank is visited*/
 	//boolean visited
 	private boolean visited;
-	/**realized that the coordinate is necessary to differentiate between similar nodes
-	 * error fixing
+	/**
+	 * realized that the coordinate is necessary to differentiate between
+	 * nodes with same ladder configurations
+	 * 
+	 * Error Fixing
 	 * as faithful as possible to the pseudocode
 	 * */
 	private Coordinate coordinate;
 	
+	/**
+	 * constructs the maze node
+	 * @param coordinate	the coordinate to make this node at
+	 */
 	public MazeNode (Coordinate coordinate){
 		this.coordinate = coordinate;
 	}
@@ -73,6 +90,10 @@ public class MazeNode {
 		return coordinate;
 	}
 	
+	/**
+	 * puts down the ladder in the direction specified
+	 * @param direction	the direction to specify
+	 */
 	public void putDownLadder (MazeDirection direction){
 		switch(direction){
 		case up:
@@ -93,6 +114,11 @@ public class MazeNode {
 		}
 	}
 	
+	/**
+	 * checks if there's a ladder in the direction specified
+	 * @param direction
+	 * @return
+	 */
 	public boolean hasLadder (MazeDirection direction){
 		switch(direction){
 		case up:
@@ -111,8 +137,8 @@ public class MazeNode {
 	
 	/**
 	 * returns a node with same planks and coordinate, but with cleared visited
-	 * @param node
-	 * @return
+	 * @param node	the node to copy
+	 * @return	the copied node
 	 */
 	public static MazeNode copyNode (MazeNode node){
 		MazeNode newNode = new MazeNode(node.getCoordinate());

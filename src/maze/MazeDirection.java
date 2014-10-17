@@ -1,7 +1,18 @@
 package maze;
 
+/**
+ * An enum to define the directions a ladder can be placed
+ * @author Ted Kim
+ *
+ */
 public enum MazeDirection {
+	/**the four directions*/
 	up,down,left,right;
+	
+	/**
+	 * tells the opposite direction of this direction
+	 * @return	the opposite direction of this direction
+	 */
 	public MazeDirection opposite(){
 		switch(this){
 		case up:

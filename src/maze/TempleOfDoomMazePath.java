@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * 
- * @author ted
+ * The class used to find the shortest path of a maze while putting down one ladder
+ * @author Ted Kim
  *
  */
 public class TempleOfDoomMazePath {
@@ -17,7 +17,15 @@ public class TempleOfDoomMazePath {
 	/**
 	 * function shortestPlankPath(mazeArr, entrance, exit)
 	 * these inputs collectively tell about 
-	 * the size of the pillar grid and the plank layout*/
+	 * the size of the pillar grid and the plank layout
+	 */
+	/**
+	 * finds the shortest path of a maze while putting down one ladder
+	 * @param maze	the maze to traverse
+	 * @param entrance	the coordinate of the entrance
+	 * @param exit	the coordinate of the exit
+	 * @return	the ordered list representing the path
+	 */
 	public List<MazeNode> shortestPlankPath(Maze maze, Coordinate entrance, 
 			Coordinate exit){
 
