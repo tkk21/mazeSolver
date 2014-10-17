@@ -122,10 +122,9 @@ public class TempleOfDoomMazePath {
 	}
 
 	/**
-	 * creates 
-	 * @param minPath
-	 * @param prevMap
-	 * @param node
+	 * creates a minimum path out of the prevs
+	 * @param prevMap	the map of prevs to check
+	 * @param node	the start node to traverse from
 	 */
 	private List<MazeNode> createMinPath(HashMap<MazeNode, MazeNode> prevMap, 
 			MazeNode node) {
@@ -138,7 +137,14 @@ public class TempleOfDoomMazePath {
 		return minPath;
 	}
 
-
+	/**
+	 * checks if there is a plank to traverse
+	 * then adds the node that the plank is pointing to the queue
+	 * @param maze	the maze to check
+	 * @param queue	the queue to add to
+	 * @param prevMap	a map to record the planks taken
+	 * @param node	the source node to check adjacents of
+	 */
 	private void addAdjacentPlanksToQueue(Maze maze, Queue<MazeNode> queue,
 			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
 		MazeNode toPut;
@@ -164,6 +170,13 @@ public class TempleOfDoomMazePath {
 		}
 	}
 	
+	/**
+	 * checks to see if a plank can be placed in the specified direction
+	 * @param maze	the maze to check
+	 * @param toVisitCoord	the coordinate to check
+	 * @param direction	the specified direction
+	 * @return	true if plank can be placed, false otherwise
+	 */
 	private boolean checkPlankPlacement(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
 		boolean canPlace = true;//using this variable to closely resemble the pseudocode
 		MazeNode toVisit = maze.getNode(toVisitCoord);
