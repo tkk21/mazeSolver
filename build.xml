@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="everything" name="Maze">
+<project basedir="." default="all" name="Maze">
 	<property environment="env"/>
 	<property name="junit.output.dir" value="junit"/>
 	<property name="debuglevel" value="source,lines,vars"/>
@@ -14,17 +14,7 @@
 		<path refid="JUnit 4.libraryclasspath"/>
 	</path>
 	
-	<target name="everything">
-		<!--build-->
-		<mkdir dir="bin"/>
-		<echo message="${ant.project.name}: ${ant.file}"/>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/> <!-- where are our source files stored? -->
-			<classpath refid="JUnit 4.libraryclasspath"/> <!-- import JUnit library so we can compile JUnit test cases! -->
-            <classpath refid="Maze.classpath"/> 
-        </javac>
-		<!--clean-->
-		<delete dir="bin"/>
+	<target name="all" depends="build,clean">
 	</target>
 	
 	<target name="build">
