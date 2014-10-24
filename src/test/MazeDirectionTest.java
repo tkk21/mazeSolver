@@ -11,7 +11,7 @@ public class MazeDirectionTest {
 	 * Structured Basis test case
 	 */
 	@Test
-	public void testOpposite_Up() {
+	public void testOpposite_up() {
 		MazeDirection direction = MazeDirection.up;
 		MazeDirection actual = direction.opposite();
 		assertEquals(MazeDirection.down, actual);
@@ -21,7 +21,7 @@ public class MazeDirectionTest {
 	 * Structured Basis test case
 	 */
 	@Test
-	public void testOpposite_Down() {
+	public void testOpposite_down() {
 		MazeDirection direction = MazeDirection.down;
 		MazeDirection actual = direction.opposite();
 		assertEquals(MazeDirection.up, actual);
@@ -31,7 +31,7 @@ public class MazeDirectionTest {
 	 * Structured Basis test case
 	 */
 	@Test
-	public void testOpposite_Left() {
+	public void testOpposite_left() {
 		MazeDirection direction = MazeDirection.left;
 		MazeDirection actual = direction.opposite();
 		assertEquals(MazeDirection.right, actual);
@@ -41,7 +41,7 @@ public class MazeDirectionTest {
 	 * Structured Basis test case
 	 */
 	@Test
-	public void testOpposite_Right() {
+	public void testOpposite_right() {
 		MazeDirection direction = MazeDirection.right;
 		MazeDirection actual = direction.opposite();
 		assertEquals(MazeDirection.left, actual);
@@ -51,7 +51,7 @@ public class MazeDirectionTest {
 	 * Structured Basis, Bad data
 	 */
 	@Test(expected = NullPointerException.class)
-	public void testOpposite_BadData() {
+	public void testOpposite_badData() {
 		MazeDirection direction = null;
 		MazeDirection actual = direction.opposite();
 		assertEquals(null, actual);
