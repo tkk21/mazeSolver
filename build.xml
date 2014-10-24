@@ -34,14 +34,61 @@
             <classpath refid="Maze.classpath"/> <!-- so we can find our compiled bits! -->
         </java>
     </target>
-	<!--
-	<target name="test">
+	
+	<target name="test" depends="CoordinateTest">
+    </target>
+	
+	<target name="CoordinateTest" depends="MazeBuilderTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="ExampleTests" todir="${junit.output.dir}"/>
-            <classpath refid="Maze.classpath"/>
+            <test name="test.CoordinateTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
         </junit>
     </target>
-	-->
+
+	<target name="MazeBuilderTest" depends="MazeDirectionTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.MazeBuilderTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
+        </junit>
+    </target>
+	
+	<target name="MazeDirectionTest" depends="MazeNodeTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.MazeDirectionTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
+        </junit>
+    </target>
+
+	<target name="MazeNodeTest" depends="MazePathSolverTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.MazeNodeTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
+        </junit>
+    </target>
+	
+	<target name="MazePathSolverTest" depends="MazeTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.MazePathSolverTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
+        </junit>
+    </target>
+
+	<target name="MazeTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.MazeTest" todir="${junit.output.dir}"/>
+            <classpath refid="Test.classpath"/>
+        </junit>
+    </target>
 </project>
