@@ -42,6 +42,13 @@ public class MazeNodeTest {
 	}
 
 	/**
+	 * hasUp, hasDown, hasLeft, hasRight, isVisited
+	 * are getter methods
+	 * no data flow, no boundaries, and no bad data
+	 * even if bad data is stored in the field,
+	 * that is the job of other methods to check
+	 */
+	/**
 	 * structural basis
 	 * good data
 	 */
@@ -60,31 +67,107 @@ public class MazeNodeTest {
 		assertFalse(node.hasUp());
 	}
 
+	/**
+	 * structural basis
+	 * good data
+	 */
 	@Test
 	public void testHasDown() {
-		fail("Not yet implemented");
+		node.placeLadder(MazeDirection.down);
+		assertTrue(node.hasDown());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasDown_false() {
+		assertFalse(node.hasDown());
 	}
 
+	/**
+	 * structural basis
+	 * good data
+	 */
 	@Test
 	public void testHasLeft() {
-		fail("Not yet implemented");
+		node.placeLadder(MazeDirection.left);
+		assertTrue(node.hasLeft());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasLeft_false() {
+		assertFalse(node.hasLeft());
 	}
 
+	/**
+	 * structural basis
+	 * good data
+	 */
 	@Test
 	public void testHasRight() {
-		fail("Not yet implemented");
+		node.placeLadder(MazeDirection.right);
+		assertTrue(node.hasRight());
 	}
 
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasRight_false() {
+		assertFalse(node.hasRight());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
 	@Test
 	public void testIsVisited() {
-		fail("Not yet implemented");
+		node.setVisited(true);
+		assertTrue(node.isVisited());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testIsVisited_false() {
+		assertFalse(node.isVisited());
 	}
 
+	/**
+	 * setVisited, setUp, setDown, setLeft, setRight
+	 * are setter methods
+	 * no boundaries, no bad data (what is a bad primitive boolean?)
+	 *  
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 */
 	@Test
 	public void testSetVisited() {
-		fail("Not yet implemented");
+		boolean before = node.isVisited();
+		node.setVisited(true);
+		assertFalse(node.isVisited() == before);
+		assertTrue(node.isVisited());
 	}
 
+	
+	
+	
+	
+	
+	
 	@Test
 	public void testGetCoordinate() {
 		fail("Not yet implemented");
