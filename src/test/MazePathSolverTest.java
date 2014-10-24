@@ -59,20 +59,20 @@ public class MazePathSolverTest {
 	 * 4. minPath != null and minPath.size<plankPath.size -> minPath smaller than plankPath
 	 * 
 	 * bad data
-	 * 5. null plankPath
-	 * 6. null minPath
+	 * 5. null plankPath and null minPath
 	 * 
 	 * no data flow, nothing's being changed just compared
 	 * 
 	 * boundary
-	 * 7. when minPath.size == plankPath.size
+	 * 6. when minPath.size == plankPath.size
 	 * 
+	 * compound boundary doesn't really apply well here since this is comparison
+	 * it does not matter if the comparison is between two big paths or with two small paths
 	 */
 	/**
-	 * 1.
 	 * Structural Basis
 	 * good data
-	 * compound boundary
+	 *  boundary
 	 * @throws InvocationTargetException 
 	 * @throws IllegalArgumentException 
 	 * @throws IllegalAccessException 
@@ -87,7 +87,104 @@ public class MazePathSolverTest {
 		plankPath = createNodeList(3);
 		assertEquals(plankPath, reflectComparePath(minPath, plankPath));
 	}
-
+	
+	/**
+	 * Structural Basis
+	 * good data
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InstantiationException 
+	 * 
+	 */
+	@Test
+	public void testComparePath_plankWinsByDefault() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		minPath = null;
+		plankPath = createNodeList(3);
+		assertEquals(plankPath, reflectComparePath(minPath, plankPath));
+	}
+	
+	/**
+	 * Structural Basis
+	 * good data
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InstantiationException 
+	 * 
+	 */
+	@Test
+	public void testComparePath_plankPathNull() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		minPath = createNodeList(4);
+		plankPath = null;
+		assertEquals(minPath, reflectComparePath(minPath, plankPath));
+	}
+	
+	/**
+	 * Structural Basis
+	 * good data
+	 *  boundary
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InstantiationException 
+	 * 
+	 */
+	@Test
+	public void testComparePath_minPathWinsByComparison() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		minPath = createNodeList(4);
+		plankPath = createNodeList(5);
+		assertEquals(minPath, reflectComparePath(minPath, plankPath));
+	}
+	
+	/**
+	 * "bad data"
+	 * 
+	 * closest to bad data as this method can get
+	 * However, this is actually a legitimate case
+	 * example:
+	 * a minPath is not found out of the maze states so far
+	 * and the plankPath recently found also doesn't reach the exit
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testComparePath_nullPaths() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		minPath = null;
+		plankPath = null;
+		assertEquals(null, reflectComparePath(minPath, plankPath));
+	}
+	
+	/**
+	 * boundary
+	 * 
+	 * when they're both equal,
+	 * minPath is picked over plankPath because minPath was earlier
+	 * this has an implication that plankPath may be the shortest path
+	 * without using any planks
+	 * and that may arguably be better
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testComparePath_equalPaths() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		minPath = createNodeList(4);
+		plankPath = createNodeList(4);
+		assertEquals(minPath, reflectComparePath(minPath, plankPath));
+	}
 
 	private List<MazeNode> createNodeList(int size){
 		ArrayList<MazeNode> list = new ArrayList<MazeNode>();
