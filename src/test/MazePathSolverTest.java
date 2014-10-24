@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -467,11 +468,89 @@ public class MazePathSolverTest {
 		return (List<MazeNode>)method.invoke(solver,prevMap,node);
 	}
 	
+	/**
+	 * cases for addAdjcaentPlanks
+	 * 1. nominal case 
+	 * 2. for condition is false -> not possible MazeDirection is defined to have 4 directions
+	 * 2. MazeNode is at the edge of the maze -> some of its adjacents are not in the maze
+	 * 
+	 * Data flow	prevMap is updated as nodes are added to the queue
+	 * consider data flow for cases
+	 * 
+	 * (compound) boundary	there should be one, but not currently enforced
+	 * 
+	 * bad data	cannot happen since they are checked within the caller method
+	 * or they are initialized in the caller method
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * 
+	 * this test fails because addAdjacentPlanks does not check
+	 * if there is a plank towards an adjacent node
+	 * 
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	@Test
-	public void testAddAdjacentPlanks() {
+	public void testAddAdjacentPlanks_nominal() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
 		
+		Queue<MazeNode> queue = new LinkedList<MazeNode>();
+		HashMap<MazeNode, MazeNode> prevMap = new HashMap<MazeNode,MazeNode>();
+		MazeNode node = maze.getNode(new Coordinate(2, 2));
+		//two ladders by this node
+		reflectAddAdjacentPlanks(maze, queue, prevMap, node);
+		
+		assertEquals(2, queue.size());
+		assertEquals(2, prevMap.size());
 	}
 
+	/**
+	 * boundary
+	 * data flow
+	 * good data
+	 * 
+	 * ArrayIndexOutOfBoundsException since 
+	 * addAdjacentPlanks tries to add nodes that are not in the maze
+	 * This could be fixed by checking if a coordinate is withinBounds first
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testAddAdjacentPlanks_outsideMaze() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
+
+		Queue<MazeNode> queue = new LinkedList<MazeNode>();
+		HashMap<MazeNode, MazeNode> prevMap = new HashMap<MazeNode,MazeNode>();
+		MazeNode node = maze.getNode(new Coordinate(0, 0));
+		
+		//one ladder by this node
+		reflectAddAdjacentPlanks(maze, queue, prevMap, node);
+		assertEquals(1, queue.size());
+		assertEquals(1, prevMap.size());
+	}
+	
 	private void reflectAddAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
 			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Method method = MazePathSolver.class.getDeclaredMethod
@@ -480,6 +559,120 @@ public class MazePathSolverTest {
 		method.invoke(solver,maze,queue,prevMap,node);
 	}
 
+	/**
+	 * cases for canPlacePlank
+	 * 1. nominal case (within bounds, isn't visited, doesn't have ladder)
+	 * 2. not within bounds
+	 * 3. is visited
+	 * 4. has ladder
+	 * 
+	 * no data flow involved
+	 * no (compound) boundary involved
+	 * 
+	 * bad data not possible
+	 * since the caller methods initializes or checks the parameters
+	 * 
+	 *  
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 * 
+	 * there is a mistake in the and logic where
+	 * instead of "and does not have ladder"
+	 * a mistake was made and the "not" was taken out
+	 * This by one character error can be fixed by adding the not to has ladder
+	 *  
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testCanPlacePlank_nominal() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
+
+		assertTrue(reflectCanPlacePlank(maze, new Coordinate(0,0), MazeDirection.right));
+	}
+	
+	/**
+	 * good data
+	 * structural basis
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testCanPlacePlank_notWithinBounds() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
+		
+		assertFalse(reflectCanPlacePlank(maze, new Coordinate(0, 0), MazeDirection.down));
+	}
+	
+	/**
+	 * good data
+	 * structural basis
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testCanPlacePlank_isVisited() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
+		
+		maze.getNode(new Coordinate(0, 2)).setVisited(true);
+		assertFalse(reflectCanPlacePlank(maze, new Coordinate(0, 1), MazeDirection.up));
+	}
+	
+	/**
+	 * good data
+	 * structural basis
+	 * 
+	 * this case is where the mistake is at
+	 * the not character really should be added to fix this logic
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testCanPlacePlank_hasLadder() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
+		
+		assertFalse(reflectCanPlacePlank(maze, new Coordinate(0, 0), MazeDirection.up));
+	}
+	
+	
 	private boolean reflectCanPlacePlank(Maze maze, Coordinate toVisitCoord, 
 			MazeDirection direction) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazePathSolver.class.getDeclaredMethod
