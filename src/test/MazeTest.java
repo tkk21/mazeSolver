@@ -59,8 +59,8 @@ public class MazeTest {
 	@Test
 	public void testGetNode_withinMaze() {
 		buildMaze();
-		assertEquals(new MazeNode(new Coordinate(1, 2)), 
-				maze.getNode(new Coordinate(1, 2)));
+		assertTrue(nodeEquals(new MazeNode(new Coordinate(1, 2)), 
+				maze.getNode(new Coordinate(1, 2))));
 	}
 	
 	/**
@@ -105,8 +105,8 @@ public class MazeTest {
 	public void testSetNode_withinMaze() {
 		maze = new Maze(3);
 		maze.setNode(new Coordinate(1, 2), new MazeNode(new Coordinate(1, 2)));
-		assertEquals(new MazeNode(new Coordinate(1, 2)), 
-				maze.getNode(new Coordinate(1, 2)));
+		assertTrue(nodeEquals(new MazeNode(new Coordinate(1, 2)), 
+				maze.getNode(new Coordinate(1, 2))));
 	}
 
 	/**
@@ -147,14 +147,53 @@ public class MazeTest {
 		assertEquals(4, maze.size());
 	}
 
+	/**
+	 * cases for withinBounds
+	 * 1. nominal case, first quadrant and x<size and y<size
+	 * 2. x>size
+	 * 3. y>size
+	 * 4. not first quadrant
+	 * 5. null coordinate
+	 */
+	
+	/**
+	 * Structural basis
+	 * Good data
+	 * Boundary 
+	 */
 	@Test
-	public void testWithinBounds() {
-		fail("Not yet implemented");
+	public void testWithinBounds_nominal() {
+		buildMaze();
+		for (int i = 0; i<maze.size();i++){
+			for(int j = 0; j<maze.size();j++){
+				assertTrue("failed at " + i+ "," + j,
+						maze.withinBounds(new Coordinate(i, j)));
+			}
+		}
+		//there's no node that we missed
+		assertFalse(maze.withinBounds(new Coordinate(3, 3)));
 	}
 	
 	private void buildMaze() {
 		MazeBuilder builder = new MazeBuilder(3);
 		maze = builder.toMaze();
+	}
+	
+	/**
+	 * realized that there was no equals method for nodes
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	private boolean nodeEquals(MazeNode a, MazeNode b){
+		boolean equal = true;
+		equal &= (a.hasUp()==b.hasUp());
+		equal &= (a.hasDown()==b.hasDown());
+		equal &= (a.hasLeft()==b.hasLeft());
+		equal &= (a.hasRight()==b.hasRight());
+		equal &= (a.isVisited()==b.isVisited());
+		equal &= (a.getCoordinate().equals(b.getCoordinate()));
+		return equal;
 	}
 
 }
