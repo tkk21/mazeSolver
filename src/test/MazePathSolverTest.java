@@ -82,6 +82,9 @@ public class MazePathSolverTest {
 	 * structural basis
 	 * good data
 	 * 
+	 * multiple valid shortest paths, 
+	 * but the first one is picked as the shortest path
+	 * 
 	 * BFS has an error where it doesn't check if a coordinate is in the maze or not
 	 * if that is fixed, this should run properly
 	 */
@@ -103,8 +106,108 @@ public class MazePathSolverTest {
 	
 	/**
 	 * test cases from pseudocode
+	 * 1. worst case for traversal without plank
+	 * 2. unexpected path case
+	 * 3. no valid path (entrance and exit still in maze)
+	 * 4. n=1 maze
+	 * 5. n=0 maze
+	 */
+	
+	/**
+	 * good data
+	 * 
+	 * this also doesn't run coorectly due to bfs error
+	 */
+	@Test
+	public void testShortestPlankPath_plankReducePath(){
+		MazeBuilder builder = new MazeBuilder(5);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 0), builder, 4);
+		placeLadderStraight(MazeDirection.up, new Coordinate(0, 0), builder, 1);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 1), builder, 4);
+		placeLadderStraight(MazeDirection.up, new Coordinate(4, 1), builder, 1);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 2), builder, 4);
+		placeLadderStraight(MazeDirection.up, new Coordinate(0, 2), builder, 1);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 3), builder, 4);
+		placeLadderStraight(MazeDirection.up, new Coordinate(4, 3), builder, 1);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 4), builder, 4);
+		
+		Maze maze = builder.toMaze();
+		
+		assertEquals(16, solver.shortestPlankPath(maze, new Coordinate(4, 0), new Coordinate(0, 4)).size());
+	}
+	
+	/**
+	 * good data
+	 * 
+	 * this also doesn't run correctly due to bfs error
+	 */
+	@Test
+	public void testShortestPlankPath_unExpectedPath(){
+		MazeBuilder builder = new MazeBuilder(5);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 0), builder, 4);
+		placeLadderStraight(MazeDirection.up, new Coordinate(0, 0), builder, 2);
+		
+		placeLadderStraight(MazeDirection.up, new Coordinate(4, 0), builder, 1);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 1), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 1), builder, 1);
+		placeLadderStraight(MazeDirection.right, new Coordinate(2, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(4, 2), builder, 2);
+		placeLadderStraight(MazeDirection.left, new Coordinate(4, 4), builder, 1);
+		placeLadderStraight(MazeDirection.down, new Coordinate(3, 4), builder, 1);
+		placeLadderStraight(MazeDirection.left, new Coordinate(3, 3), builder, 1);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 3), builder, 1);
+		placeLadderStraight(MazeDirection.left, new Coordinate(2, 4), builder, 1);
+		
+		Maze maze = builder.toMaze();
+		
+		assertEquals(14, solver.shortestPlankPath(maze, new Coordinate(4, 0), new Coordinate(0, 4)));
+	}
+	
+	/**
+	 * bad data
+	 * 
+	 * instead of getting NPE,
+	 * a null minPath should have been returned
+	 * 
+	 * still gets array index out of bounds exception due to bfs error
+	 */
+	@Test
+	public void testShortestPlankPath_noValidPath() {
+		MazeBuilder builder = new MazeBuilder(5);
+		Maze maze = builder.toMaze();
+		
+		assertEquals(null, solver.shortestPlankPath(maze,
+				new Coordinate(4, 0), new Coordinate(0, 4)));
+	}
+	
+	/**
+	 * boundary edge for maze size
+	 * 
+	 * gets error due to bfs error
+	 */
+	@Test
+	public void testShortestPlankPath_size1Maze() {
+		MazeBuilder builder = new MazeBuilder(1);
+		Maze maze = builder.toMaze();
+		
+		assertEquals(1, solver.shortestPlankPath(maze, new Coordinate(0, 0), new Coordinate(0, 0)));
+	}
+	
+	/**
+	 * boundary edge for maze size
+	 * bad data
 	 * 
 	 */
+	@Test(expected=NullPointerException.class)
+	public void testShortestPlankPath_size0Maze() {
+		MazeBuilder builder = new MazeBuilder(0);
+		Maze maze = builder.toMaze();
+		
+		//NPE
+		assertEquals(0, solver.shortestPlankPath(maze, null, null));
+		//null list
+		assertEquals(null, solver.shortestPlankPath(maze, new Coordinate(0, 0), new Coordinate(0, 0)));
+	}
 	
 	@Test
 	public void testShortestPlankPath_stressTest() {
