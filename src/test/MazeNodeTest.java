@@ -1,6 +1,10 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import maze.Coordinate;
 import maze.MazeDirection;
 import maze.MazeNode;
@@ -161,8 +165,78 @@ public class MazeNodeTest {
 		assertFalse(node.isVisited() == before);
 		assertTrue(node.isVisited());
 	}
-
 	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testSetUp() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		boolean before = node.hasUp();
+		reflectSetUp(node, true);
+		assertFalse(node.hasUp() == before);
+		assertTrue(node.hasUp());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testSetDown() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		boolean before = node.hasDown();
+		reflectSetDown(node, true);
+		assertFalse(node.hasDown() == before);
+		assertTrue(node.hasDown());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testSetLeft() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		boolean before = node.hasLeft();
+		reflectSetLeft(node, true);
+		assertFalse(node.hasLeft() == before);
+		assertTrue(node.hasLeft());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testSetRight() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		boolean before = node.hasRight();
+		reflectSetRight(node, true);
+		assertFalse(node.hasRight() == before);
+		assertTrue(node.hasRight());
+	}
 	
 	
 	
@@ -188,4 +262,31 @@ public class MazeNodeTest {
 		fail("Not yet implemented");
 	}
 
+	private void reflectSetUp(MazeNode node, boolean up) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method method = MazeNode.class.getDeclaredMethod
+				("setUp", Boolean.class);
+		method.setAccessible(true);
+		method.invoke(node, up);
+	}
+	
+	private void reflectSetDown(MazeNode node, boolean down) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method method = MazeNode.class.getDeclaredMethod
+				("setDown", Boolean.class);
+		method.setAccessible(true);
+		method.invoke(node, down);
+	}
+	
+	private void reflectSetLeft(MazeNode node, boolean left) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method method = MazeNode.class.getDeclaredMethod
+				("setLeft", Boolean.class);
+		method.setAccessible(true);
+		method.invoke(node, left);
+	}
+	
+	private void reflectSetRight(MazeNode node, boolean right) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Method method = MazeNode.class.getDeclaredMethod
+				("setRight", Boolean.class);
+		method.setAccessible(true);
+		method.invoke(node, right);
+	}
 }
