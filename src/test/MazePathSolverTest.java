@@ -2,6 +2,15 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Queue;
+
+import maze.Coordinate;
+import maze.Maze;
+import maze.MazeDirection;
+import maze.MazeNode;
+
 import org.junit.Test;
 
 public class MazePathSolverTest {
@@ -25,5 +34,32 @@ public class MazePathSolverTest {
 	public void testShortestPlankPath() {
 		fail("Not yet implemented");
 	}
+	
+	/**
+	 * private List<MazeNode> comparePath(List<MazeNode> minPath,
+			List<MazeNode> plankPath) {
+	 */
 
+	/**
+	 * private boolean canBeComplete(Coordinate entrance, Coordinate exit, Maze maze) {
+	 */
+	
+	/**
+	 * 	private List<MazeNode> breadthFirstSearch(Maze maze, Coordinate entrance,
+			Coordinate exit){
+	 */
+	
+	/**
+	 * 	private List<MazeNode> createMinPath(HashMap<MazeNode, MazeNode> prevMap, 
+			MazeNode node) {
+	 */
+	
+	/**
+	 * 	private void addAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
+			HashMap<MazeNode, MazeNode> prevMap, MazeNode node) {
+	 */
+	
+	/**
+	 * private boolean canPlacePlank(Maze maze, Coordinate toVisitCoord, MazeDirection direction){
+	 */
 }
