@@ -376,19 +376,100 @@ public class MazePathSolverTest {
 
 	/**
 	 * cases for createMinPath
-	 * 1. nominal case
+	 * 1. nominal case -> minPath made out of prevMap
 	 * 2. node entered is null -> no path found out of all the maze states
+	 * 
+	 * Data flow minPath is created out of prevMap
+	 * is the minPath in the same order as the prevs in prevMap?
+	 * 
+	 * no (compound) boundary here
+	 * 
+	 * bad data it's already checked for in other methods
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * 
+	 * 
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
 	 */
 	@Test
-	public void testCreateMinPath() {
+	public void testCreateMinPath_nominal() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		MazeBuilder builder = new MazeBuilder(5);
+
+		placeLadderStraight(MazeDirection.up, new Coordinate(0,0), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		Maze maze = builder.toMaze();
 		
+		HashMap<MazeNode,MazeNode> prevMap = new HashMap<MazeNode,MazeNode>();
+		MazeNode node = maze.getNode(new Coordinate(4, 4));
+		
+		prevMap.put(maze.getNode(new Coordinate(0, 1)), maze.getNode(new Coordinate(0, 0)));
+		prevMap.put(maze.getNode(new Coordinate(0, 2)), maze.getNode(new Coordinate(0, 1)));
+		prevMap.put(maze.getNode(new Coordinate(0, 3)), maze.getNode(new Coordinate(0, 2)));
+		prevMap.put(maze.getNode(new Coordinate(0, 4)), maze.getNode(new Coordinate(0, 3)));
+		prevMap.put(maze.getNode(new Coordinate(1, 4)), maze.getNode(new Coordinate(0, 4)));
+		prevMap.put(maze.getNode(new Coordinate(2, 4)), maze.getNode(new Coordinate(1, 4)));
+		prevMap.put(maze.getNode(new Coordinate(3, 4)), maze.getNode(new Coordinate(2, 4)));
+		prevMap.put(maze.getNode(new Coordinate(4, 4)), maze.getNode(new Coordinate(3, 4)));
+		
+		List<MazeNode> expected = new ArrayList<MazeNode>();
+		expected.add(maze.getNode(new Coordinate(4,4)));
+		expected.add(maze.getNode(new Coordinate(3,4)));
+		expected.add(maze.getNode(new Coordinate(2,4)));
+		expected.add(maze.getNode(new Coordinate(1,4)));
+		expected.add(maze.getNode(new Coordinate(0,4)));
+		expected.add(maze.getNode(new Coordinate(0,3)));
+		expected.add(maze.getNode(new Coordinate(0,2)));
+		expected.add(maze.getNode(new Coordinate(0,1)));
+		expected.add(maze.getNode(new Coordinate(0,0)));
+		//preserves the order of visitedbut in reverse direction
+		
+		assertEquals(expected,reflectCreateMinPath(prevMap, node));
 	}
+	
+	/**
+	 * good data
+	 * structural basis
+	 * 
+	 * if while resolves to false
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 */
+	@Test
+	public void testCreateMinPath_nullNode() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		HashMap<MazeNode,MazeNode> prevMap = new HashMap<MazeNode,MazeNode>();
+		MazeNode node = null;
+		
+		assertEquals(new ArrayList<MazeNode>(), reflectCreateMinPath(prevMap, node));
+	}
+	
 	private List<MazeNode> reflectCreateMinPath(HashMap<MazeNode, MazeNode> prevMap, 
 			MazeNode node) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("createMinPath", HashMap.class, MazeNode.class);
 		method.setAccessible(true);
 		return (List<MazeNode>)method.invoke(solver,prevMap,node);
+	}
+	
+	@Test
+	public void testAddAdjacentPlanks() {
+		
 	}
 
 	private void reflectAddAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
