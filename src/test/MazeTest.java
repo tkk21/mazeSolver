@@ -94,15 +94,57 @@ public class MazeTest {
 		assertEquals(null, maze.getNode(null));
 	}
 	
-	
+	/**
+	 * Structural basis
+	 * Good data
+	 * 
+	 * realized that the coordinate could be extracted from the MazeNode
+	 * reducing the number of parameters for setNode may reduce room for errors
+	 */
 	@Test
-	public void testSetNode() {
-		fail("Not yet implemented");
+	public void testSetNode_withinMaze() {
+		maze = new Maze(3);
+		maze.setNode(new Coordinate(1, 2), new MazeNode(new Coordinate(1, 2)));
+		assertEquals(new MazeNode(new Coordinate(1, 2)), 
+				maze.getNode(new Coordinate(1, 2)));
 	}
 
+	/**
+	 * Bad data
+	 * 
+	 * Similarly to getNode,
+	 * currently, there should be no way this case would be reached
+	 * as the loop in methods that calls setNode
+	 * only loops inside the maze
+	 * 
+	 * However, for the same reason,
+	 * there should be a redundant check on this method
+	 * as future methods may not check to make sure coordinate is in the maze
+	 */
+	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	public void testSetNode_outOfMaze() {
+		maze = new Maze(3);
+		maze.setNode(new Coordinate(1, 5), new MazeNode(new Coordinate(1, 5)));
+	}
+	
+	/**
+	 * Bad data
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testSetNode_nullCoordinate() {
+		maze = new Maze(3);
+		maze.setNode(null, new MazeNode(null));
+	}
+	
+	/**
+	 * Structural basis
+	 * 
+	 * there is no need for other cases as those are covered by the constructor
+	 */
 	@Test
 	public void testSize() {
-		fail("Not yet implemented");
+		maze = new Maze(4);
+		assertEquals(4, maze.size());
 	}
 
 	@Test
