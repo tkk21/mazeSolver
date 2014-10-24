@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.*;
 import maze.Coordinate;
 import maze.Maze;
+import maze.MazeBuilder;
 import maze.MazeNode;
 
 import org.junit.Before;
@@ -52,11 +53,48 @@ public class MazeTest {
 		assertEquals(0, maze.size());
 	}
 
+	/**
+	 * Structured Basis
+	 */
 	@Test
-	public void testGetNode() {
-		fail("Not yet implemented");
+	public void testGetNode_withinMaze() {
+		buildMaze();
+		assertEquals(new MazeNode(new Coordinate(1, 2)), 
+				maze.getNode(new Coordinate(1, 2)));
+	}
+	
+	/**
+	 * Bad data
+	 * 
+	 * all the methods that calls getNode already checks to make sure 
+	 * that the coordinate is in the maze
+	 * or only loops through the inside of the maze.
+	 * So currently, this wouldn't cause much problem.
+	 * 
+	 * However, in the future, there might be methods that call getNode without checking
+	 * that the coordinate is in the maze.
+	 * Thus, there should be a check for this even though it is redundant at the moment
+	 */
+	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	public void testGetNode_outOfMaze() {
+		buildMaze();
+		assertEquals(null, maze.getNode(new Coordinate(-3, -2)));
 	}
 
+	/**
+	 * Bad data
+	 * 
+	 * This is something that should happen.
+	 * If a null coordinate is passed in,
+	 * there should be an exception to warn the user
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetNode_nullCoordinate() {
+		buildMaze();
+		assertEquals(null, maze.getNode(null));
+	}
+	
+	
 	@Test
 	public void testSetNode() {
 		fail("Not yet implemented");
@@ -70,6 +108,11 @@ public class MazeTest {
 	@Test
 	public void testWithinBounds() {
 		fail("Not yet implemented");
+	}
+	
+	private void buildMaze() {
+		MazeBuilder builder = new MazeBuilder(3);
+		maze = builder.toMaze();
 	}
 
 }
