@@ -45,10 +45,70 @@ public class MazePathSolverTest {
 	 * 
 	 * compound boundaries, when there's a comparison
 	 * 	eg. x>1 -> 1. x<1 2. x=1 3. x>1
+	 *
+	 */
+	/**
+	 * 	public List<MazeNode> shortestPlankPath(Maze maze, Coordinate entrance, 
+			Coordinate exit){
+	 */
+	/**
+	 * cases for shortestPlankPath
+	 * 1. can't be complete
+	 * 2. the while loop can't be false initially
+	 * entrance is checked to be in the maze and it will be added to the queue
+	 * which means queue won't be empty initially
+	 * 2. the for loop can't be false initially
+	 * MazeDirection is defined to have 4 directions
+	 * 2. can't place planks anywhere -> first bfs (without plank) will be the shortest by default
+	 * 
+	 * data flow	defines all the data that are being changed in this method and
+	 * returns the shortest path
+	 * 
+	 * boundaries are taken care of by helper methods
+	 */
+	/**
+	 * structural basis
+	 * bad data
 	 */
 	@Test
-	public void testShortestPlankPath() {
-		fail("Not yet implemented");
+	public void testShortestPlankPath_impossiblePath() {
+		MazeBuilder builder = new MazeBuilder(5);
+		assertNull(solver.shortestPlankPath(builder.toMaze(), 
+				new Coordinate(0, 3), new Coordinate(9, 3)));
+		//realized that shortestPlankPath could have been a static method
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * 
+	 * BFS has an error where it doesn't check if a coordinate is in the maze or not
+	 * if that is fixed, this should run properly
+	 */
+	@Test
+	public void testShortestPlankPath_allPlanks() {
+		MazeBuilder builder = new MazeBuilder(5);
+		for (int i = 0; i<5; i++){
+			for (int j = 0; j<5; j++){
+				builder.placeLadder(MazeDirection.up, new Coordinate(i, j));
+				builder.placeLadder(MazeDirection.down, new Coordinate(i, j));
+				builder.placeLadder(MazeDirection.left, new Coordinate(i, j));
+				builder.placeLadder(MazeDirection.right, new Coordinate(i, j));
+			}
+		}
+		Maze maze = builder.toMaze();
+		assertEquals(8, 
+				solver.shortestPlankPath(maze, new Coordinate(0, 0), new Coordinate(4, 4)).size());
+	}
+	
+	/**
+	 * test cases from pseudocode
+	 * 
+	 */
+	
+	@Test
+	public void testShortestPlankPath_stressTest() {
+		MazeBuilder builder = new MazeBuilder(1024);
 	}
 	
 	/**
