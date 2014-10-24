@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
@@ -14,10 +15,21 @@ import maze.MazeDirection;
 import maze.MazeNode;
 import maze.MazePathSolver;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class MazePathSolverTest {
 
+	List<MazeNode> minPath;
+	List<MazeNode> plankPath;
+	MazePathSolver solver;
+	
+	@Before
+	public void init (){
+		minPath = new ArrayList<MazeNode>();
+		plankPath = new ArrayList<MazeNode>();
+		solver = new MazePathSolver();
+	}
 	/**
 	 * things to test
 	 * 1. terrible stress test since this solve is O(N^4)
@@ -57,30 +69,47 @@ public class MazePathSolverTest {
 	 * 
 	 */
 	/**
+	 * 1.
 	 * Structural Basis
 	 * good data
 	 * compound boundary
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InstantiationException 
 	 * 
 	 */
 	@Test
-	public void testComparePath_plankWinsByComparison() {
-		
+	public void testComparePath_plankWinsByComparison() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		minPath = createNodeList(4);
+		plankPath = createNodeList(3);
+		assertEquals(plankPath, reflectComparePath(minPath, plankPath));
 	}
 
 
+	private List<MazeNode> createNodeList(int size){
+		ArrayList<MazeNode> list = new ArrayList<MazeNode>();
+		for (int i = 0; i<size; i++){
+			list.add(new MazeNode(new Coordinate(i, i)));
+		}
+		return list;
+	}
+	
 	private List<MazeNode> reflectComparePath(List<MazeNode> minPath,
 			List<MazeNode> plankPath) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("comparePath", List.class, List.class);
 		method.setAccessible(true);
-		return (List<MazeNode>)method.invoke(minPath, plankPath);
+		return (List<MazeNode>)method.invoke(solver,minPath, plankPath);
 	}
 
 	private boolean reflectCanBeComplete(Coordinate entrance, Coordinate exit, Maze maze) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("canBeComplete", Coordinate.class, Coordinate.class, Maze.class);
 		method.setAccessible(true);
-		return (boolean)method.invoke(entrance, exit, maze);
+		return (boolean)method.invoke(solver,entrance, exit, maze);
 	}
 
 	private List<MazeNode> reflectBreadthFirstSearch(Maze maze, Coordinate entrance,
@@ -88,7 +117,7 @@ public class MazePathSolverTest {
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("breadthFirstSearch", Maze.class, Coordinate.class, Coordinate.class);
 		method.setAccessible(true);
-		return (List<MazeNode>)method.invoke(maze,entrance,exit);
+		return (List<MazeNode>)method.invoke(solver,maze,entrance,exit);
 	}
 
 	private List<MazeNode> reflectCreateMinPath(HashMap<MazeNode, MazeNode> prevMap, 
@@ -96,7 +125,7 @@ public class MazePathSolverTest {
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("createMinPath", HashMap.class, MazeNode.class);
 		method.setAccessible(true);
-		return (List<MazeNode>)method.invoke(prevMap,node);
+		return (List<MazeNode>)method.invoke(solver,prevMap,node);
 	}
 
 	private void reflectAddAdjacentPlanks(Maze maze, Queue<MazeNode> queue,
@@ -104,7 +133,7 @@ public class MazePathSolverTest {
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("addAdjacentPlanks", Maze.class, Queue.class, HashMap.class, MazeNode.class);
 		method.setAccessible(true);
-		method.invoke(maze,queue,prevMap,node);
+		method.invoke(solver,maze,queue,prevMap,node);
 	}
 
 	private boolean reflectCanPlacePlank(Maze maze, Coordinate toVisitCoord, 
@@ -112,6 +141,6 @@ public class MazePathSolverTest {
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("canPlacePlank", Maze.class, Coordinate.class, MazeDirection.class);
 		method.setAccessible(true);
-		return (boolean)method.invoke(maze,toVisitCoord,direction);
+		return (boolean)method.invoke(solver,maze,toVisitCoord,direction);
 	}
 }
