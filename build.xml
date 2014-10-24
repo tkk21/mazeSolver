@@ -43,7 +43,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.CoordinateTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 
@@ -52,7 +52,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.MazeBuilderTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 	
@@ -61,7 +61,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.MazeDirectionTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 
@@ -70,7 +70,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.MazeNodeTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 	
@@ -79,7 +79,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.MazePathSolverTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 
@@ -88,7 +88,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="test.MazeTest" todir="${junit.output.dir}"/>
-            <classpath refid="Test.classpath"/>
+            <classpath refid="Maze.classpath"/>
         </junit>
     </target>
 </project>
