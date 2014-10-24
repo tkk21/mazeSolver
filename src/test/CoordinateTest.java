@@ -264,6 +264,41 @@ public class CoordinateTest {
 		assertEquals(new Coordinate(2, 2), reflectCastToCoordinate(coordinate, o));
 	}
 	
+	/**
+	 * Structured Basis
+	 * Good data
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testCastToCoordinate_oIsNull() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		//realized that castToCoordinate could have been a static method
+		coordinate = new Coordinate(1, 1);
+		Object o = null;
+		assertEquals(null, reflectCastToCoordinate(coordinate, o));
+	}
+	
+	/**
+	 * Structured Basis
+	 * Bad data
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testCastToCoordinate_notCoordinate() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		//realized that castToCoordinate could have been a static method
+		coordinate = new Coordinate(1, 1);
+		Object o = "(2, 2)";
+		assertEquals(null, reflectCastToCoordinate(coordinate, o));
+	}
+	
+	
 	private Coordinate reflectCastToCoordinate(Coordinate coordinate, Object o) 
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = Coordinate.class.getDeclaredMethod
