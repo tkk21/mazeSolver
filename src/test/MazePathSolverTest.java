@@ -202,6 +202,19 @@ public class MazePathSolverTest {
 		return (List<MazeNode>)method.invoke(solver,minPath, plankPath);
 	}
 
+	/**
+	 * cases for canBeComplete
+	 * 1. nominal both are within bounds
+	 * 2. entrance not within bounds
+	 * 3. exit not within bounds
+	 * 
+	 * data flow does not apply since this is a check method
+	 * (compound)boundary does not apply since this is a sequential check method
+	 */
+	@Test
+	public void testCanBeComplete() {
+		
+	}
 	private boolean reflectCanBeComplete(Coordinate entrance, Coordinate exit, Maze maze) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazePathSolver.class.getDeclaredMethod
 				("canBeComplete", Coordinate.class, Coordinate.class, Maze.class);
