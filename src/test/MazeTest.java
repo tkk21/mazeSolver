@@ -185,7 +185,7 @@ public class MazeTest {
 	 * @param b
 	 * @return
 	 */
-	private boolean nodeEquals(MazeNode a, MazeNode b){
+	static boolean nodeEquals(MazeNode a, MazeNode b){
 		boolean equal = true;
 		equal &= (a.hasUp()==b.hasUp());
 		equal &= (a.hasDown()==b.hasDown());
