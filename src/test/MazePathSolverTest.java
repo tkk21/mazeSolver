@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import maze.Coordinate;
 import maze.Maze;
+import maze.MazeBuilder;
 import maze.MazeDirection;
 import maze.MazeNode;
 import maze.MazePathSolver;
@@ -211,9 +212,58 @@ public class MazePathSolverTest {
 	 * data flow does not apply since this is a check method
 	 * (compound)boundary does not apply since this is a sequential check method
 	 */
+	/**
+	 * good data
+	 * structural basis
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
 	@Test
-	public void testCanBeComplete() {
-		
+	public void testCanBeComplete_nominal() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Coordinate entrance = new Coordinate(0,0);
+		Coordinate exit = new Coordinate(2,3);
+		MazeBuilder builder = new MazeBuilder(4);
+		Maze maze = builder.toMaze();
+		assertTrue(reflectCanBeComplete(entrance, exit, maze));
+	}
+	
+	/**
+	 * bad data
+	 * structural basis
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testCanBeComplete_illegalEntrance() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Coordinate entrance = new Coordinate(5,0);
+		Coordinate exit = new Coordinate(2,3);
+		MazeBuilder builder = new MazeBuilder(4);
+		Maze maze = builder.toMaze();
+		assertFalse(reflectCanBeComplete(entrance, exit, maze));
+	}
+	
+	/**
+	 * bad data
+	 * structural basis
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testCanBeComplete_illegalExit() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Coordinate entrance = new Coordinate(0,0);
+		Coordinate exit = new Coordinate(2,9);
+		MazeBuilder builder = new MazeBuilder(4);
+		Maze maze = builder.toMaze();
+		assertFalse(reflectCanBeComplete(entrance, exit, maze));
 	}
 	private boolean reflectCanBeComplete(Coordinate entrance, Coordinate exit, Maze maze) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazePathSolver.class.getDeclaredMethod
