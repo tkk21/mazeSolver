@@ -271,6 +271,100 @@ public class MazePathSolverTest {
 		method.setAccessible(true);
 		return (boolean)method.invoke(solver,entrance, exit, maze);
 	}
+	
+	/**
+	 * cases for breadthFirstSearch
+	 * structural basis+good data
+	 * 1. nominal case
+	 * 2. queue is empty. can't actually happen since entrance is checked to see
+	 * if the maze can be completed
+	 * 2. exit not found
+	 * 
+	 * bad data is already handled by can be complete and null checks
+	 * 
+	 * no (compound) boundary dealt in this method
+	 * either path is found or not
+	 * 
+	 * data flow
+	 * shortest path is defined, calculated, and returned
+	 */
+	/**
+	 * Structural basis
+	 * good data
+	 * data flow
+	 * 
+	 * array index out of bounds exception
+	 * this is caused by the fact that there is no check in addAdjacentPlanks method
+	 * for checking if the adjacent node actually exists in the maze
+	 * before putting it in the queue
+	 * 
+	 * This is a severe problem and can be fixed by calling maze's within bounds method
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	@Test
+	public void testBreadthFirstSearch_nominal() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		MazeBuilder builder = new MazeBuilder(5);
+		Coordinate entrance = new Coordinate(0, 0);
+		Coordinate exit = new Coordinate(4, 4);
+		
+		placeLadderStraight(MazeDirection.up, entrance, builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 4), builder, 4);
+		placeLadderStraight(MazeDirection.right, new Coordinate(0, 2), builder, 2);
+		placeLadderStraight(MazeDirection.up, new Coordinate(2, 2), builder, 2);
+		
+		Maze maze = builder.toMaze();
+		List<MazeNode> expected = new ArrayList<MazeNode>();
+		expected.add(maze.getNode(new Coordinate(0, 0)));
+		expected.add(maze.getNode(new Coordinate(0, 1)));
+		expected.add(maze.getNode(new Coordinate(0, 2)));
+		expected.add(maze.getNode(new Coordinate(0, 3)));
+		expected.add(maze.getNode(new Coordinate(0, 4)));
+		expected.add(maze.getNode(new Coordinate(1, 4)));
+		expected.add(maze.getNode(new Coordinate(2, 4)));
+		expected.add(maze.getNode(new Coordinate(3, 4)));
+		expected.add(maze.getNode(new Coordinate(4, 4)));
+
+		assertEquals(expected, reflectBreadthFirstSearch(maze, entrance, exit));
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * 
+	 * This suffers the same problem as the nominal case where
+	 * addAdjacentPlanks will add nodes to the queue without validating that it's in the maze
+	 * 
+	 * 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	
+	@Test
+	public void testBreadthFirstSearch_noExit() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		MazeBuilder builder = new MazeBuilder(5);
+		Coordinate entrance = new Coordinate(0, 0);
+		Coordinate exit = new Coordinate(4, 4);
+		Maze maze = builder.toMaze();
+		
+		assertEquals(null, reflectBreadthFirstSearch(maze, entrance, exit));
+	}
+	
+	private void placeLadderStraight (MazeDirection direction, Coordinate source,
+			MazeBuilder builder, int num){
+		Coordinate ptr = source;
+		for (int i = 0; i<num; i++){
+			builder.placeLadder(direction, ptr);
+			ptr.getAdjacentCoordinate(direction);
+		}
+	}
 
 	private List<MazeNode> reflectBreadthFirstSearch(Maze maze, Coordinate entrance,
 			Coordinate exit) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
@@ -280,6 +374,15 @@ public class MazePathSolverTest {
 		return (List<MazeNode>)method.invoke(solver,maze,entrance,exit);
 	}
 
+	/**
+	 * cases for createMinPath
+	 * 1. nominal case
+	 * 2. node entered is null -> no path found out of all the maze states
+	 */
+	@Test
+	public void testCreateMinPath() {
+		
+	}
 	private List<MazeNode> reflectCreateMinPath(HashMap<MazeNode, MazeNode> prevMap, 
 			MazeNode node) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Method method = MazePathSolver.class.getDeclaredMethod
