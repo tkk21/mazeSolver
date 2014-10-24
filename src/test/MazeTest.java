@@ -75,7 +75,7 @@ public class MazeTest {
 	 * that the coordinate is in the maze.
 	 * Thus, there should be a check for this even though it is redundant at the moment
 	 */
-	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void testGetNode_outOfMaze() {
 		buildMaze();
 		assertEquals(null, maze.getNode(new Coordinate(-3, -2)));
@@ -121,7 +121,7 @@ public class MazeTest {
 	 * there should be a redundant check on this method
 	 * as future methods may not check to make sure coordinate is in the maze
 	 */
-	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	@Test
 	public void testSetNode_outOfMaze() {
 		maze = new Maze(3);
 		maze.setNode(new Coordinate(1, 5), new MazeNode(new Coordinate(1, 5)));
