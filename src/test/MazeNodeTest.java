@@ -48,7 +48,7 @@ public class MazeNodeTest {
 	/**
 	 * hasUp, hasDown, hasLeft, hasRight, isVisited
 	 * are getter methods
-	 * no data flow, no boundaries, and no bad data
+	 * no data flow (nothing's being changed), no boundaries, and no bad data(what's bad data for primitive boolean?)
 	 * even if bad data is stored in the field,
 	 * that is the job of other methods to check
 	 */
@@ -238,54 +238,224 @@ public class MazeNodeTest {
 		assertTrue(node.hasRight());
 	}
 	
-	
-	
-	
-	
+	/**
+	 * getCoordinate is a getter method that returns coordinate
+	 * no data flow (nothing's changed just returned)
+	 * boundaries are taken care of by other classes
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 */
 	@Test
 	public void testGetCoordinate() {
-		fail("Not yet implemented");
+		node = new MazeNode(new Coordinate(2, 3));
+		assertEquals(new Coordinate(2,3), node.getCoordinate());
 	}
-
+	
+	/**
+	 * bad data
+	 * 
+	 * This is a problem and nothing is done about it
+	 * a null coordinate would result in null pointer exception in many methods
+	 * 
+	 * A possible solution to this would be have the setting of the coordinate as
+	 * a method separate from the constructor
+	 * and having it be an invalid node
+	 * which other classes using this MazeNode would pick up and handle properly
+	 */
 	@Test
-	public void testPlaceLadder() {
-		fail("Not yet implemented");
+	public void testGetCoordinate_nullCoordinate() {
+		node = new MazeNode(null);
+		assertEquals(null, node.getCoordinate());
 	}
 
+	/**
+	 * can check for data flow for each case
+	 * cases for placeLadder
+	 * 1. up
+	 * 2. down
+	 * 3. left
+	 * 4. right
+	 * 5. null direction (bad data)
+	 * 
+	 * no boundaries involved
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 */
 	@Test
-	public void testHasLadder() {
-		fail("Not yet implemented");
+	public void testPlaceLadder_up() {
+		boolean before = node.hasUp();
+		node.placeLadder(MazeDirection.up);
+		assertFalse(before == node.hasUp());
+		assertTrue(node.hasUp());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 */
+	@Test
+	public void testPlaceLadder_down() {
+		boolean before = node.hasDown();
+		node.placeLadder(MazeDirection.down);
+		assertFalse(before == node.hasDown());
+		assertTrue(node.hasDown());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 */
+	@Test
+	public void testPlaceLadder_left() {
+		boolean before = node.hasLeft();
+		node.placeLadder(MazeDirection.left);
+		assertFalse(before == node.hasLeft());
+		assertTrue(node.hasLeft());
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 * data flow
+	 */
+	@Test
+	public void testPlaceLadder_right() {
+		boolean before = node.hasRight();
+		node.placeLadder(MazeDirection.right);
+		assertFalse(before == node.hasRight());
+		assertTrue(node.hasRight());
 	}
 
+	/**
+	 * bad data
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testPlaceLadder_nullDirection() {
+		node.placeLadder(null);
+	}
+	
+	/**
+	 * cases for hasLadder
+	 * 1. up
+	 * 2. down
+	 * 3. left
+	 * 4. right
+	 * 5. null direction
+	 * no boundaries involved
+	 * no data flow involved
+	 */
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasLadder_up() {
+		node.placeLadder(MazeDirection.up);
+		assertTrue(node.hasLadder(MazeDirection.up));
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasLadder_down() {
+		node.placeLadder(MazeDirection.down);
+		assertTrue(node.hasLadder(MazeDirection.down));
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasLadder_left() {
+		node.placeLadder(MazeDirection.left);
+		assertTrue(node.hasLadder(MazeDirection.left));
+	}
+	
+	/**
+	 * structural basis
+	 * good data
+	 */
+	@Test
+	public void testHasLadder_right() {
+		node.placeLadder(MazeDirection.right);
+		assertTrue(node.hasLadder(MazeDirection.right));
+	}
+
+	/**
+	 * bad data
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testHasLadder_nullDirection() {
+		node.hasLadder(null);
+	}
+	
+	/**
+	 * structural basis
+	 * data flow (visited is not copied but everything else is)
+	 * good data
+	 * 
+	 * no boundaries just sequential
+	 * 
+	 */
 	@Test
 	public void testCopyNode() {
-		fail("Not yet implemented");
+		node.placeLadder(MazeDirection.up);
+		node.placeLadder(MazeDirection.left);
+		node.setVisited(true);
+		
+		MazeNode copy = MazeNode.copyNode(node);
+		assertFalse(MazeTest.nodeEquals(node, copy));
+		
+		assertTrue(copy.hasUp());
+		assertTrue(copy.hasLeft());
+		assertFalse(copy.hasDown());
+		assertFalse(copy.hasRight());
+		
+		assertFalse(copy.isVisited());
+	}
+	
+	/**
+	 * bad data
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testCopyNode_nullNode(){
+		node.copyNode(null);
 	}
 
 	private void reflectSetUp(MazeNode node, boolean up) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazeNode.class.getDeclaredMethod
-				("setUp", Boolean.class);
+				("setUp", boolean.class);
 		method.setAccessible(true);
 		method.invoke(node, up);
 	}
 	
 	private void reflectSetDown(MazeNode node, boolean down) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazeNode.class.getDeclaredMethod
-				("setDown", Boolean.class);
+				("setDown", boolean.class);
 		method.setAccessible(true);
 		method.invoke(node, down);
 	}
 	
 	private void reflectSetLeft(MazeNode node, boolean left) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazeNode.class.getDeclaredMethod
-				("setLeft", Boolean.class);
+				("setLeft", boolean.class);
 		method.setAccessible(true);
 		method.invoke(node, left);
 	}
 	
 	private void reflectSetRight(MazeNode node, boolean right) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Method method = MazeNode.class.getDeclaredMethod
-				("setRight", Boolean.class);
+				("setRight", boolean.class);
 		method.setAccessible(true);
 		method.invoke(node, right);
 	}
