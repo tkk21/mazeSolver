@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=0.5in]{geometry}
+
+\title{EECS293 hw6}
+\author{Taekyu Kim tkk21}
+\begin{document}
+
+\paragraph{Pseudocode}
+\begin{verbatim}
+
+class Node{
+      //false if no plank exists, true if there is a plank
+      boolean up
+      boolean down
+      boolean left
+      boolean right
+      boolean visited
+}
+\end{verbatim}
+
+\begin{algorithmic}
+\Function{shortestPlankPath}{$mazeArr$, $entrance$, $exit$} \Comment{these inputs collectively tell about the size of the pillar grid and the plank layout}
+
+\State check for invalid set size for $entrance$ and $exit$ \Comment{entrance and exit are tuples containing the integer coordinate}
+\State $minPath \gets$ BFS on the current mazeArr \Comment{path can be implemented as a list of integer tuples}
+\State $toVisit \gets$ a queue that stores the nodes to visit
+\State add the start node to the $toVisit$ queue
+
+\While{$toVisit$ is not empty}
+\State $node.visited \gets true$
+\ForAll{direction not yet checked in node}
+\State $toVisitNode$ $\gets$ the node that the $direction$ points to
+\If{the $direction$ does not lead to node inside the $mazeArr$}
+\State \textbf{continue}
+\EndIf
+\If{$toVisitNode.visited==true$}
+\State \textbf{continue}
+\EndIf
+\If{$direction==false$}
+\State $mazeArrPlank$ $\gets$ copy the $mazeArr$
+\State $mazeArrPlank$ $\gets$ put plank down in the $direction$
+\State $plankPath$ $\gets$ BFS on that copy of $mazeArr$
+\If{$plankPath$ != null \textbf{and} ($minPath$ == null \textbf{or} length of $plankPath$ $<$ length of $minPath$ )} \Comment{BFS returns null if there is no path to the exit}
+\State $minPath$ $\gets$ $plankPath$
+\EndIf
+\Else
+\State add $toVisitNode$ to the $toVisit$ queue
+\EndIf
+\EndFor
+\EndWhile
+\Return minPath
+\EndFunction
+
+\end{algorithmic}
+
+\paragraph{Proof of correctness} \hspace{0pt}\\
+\textbf{Loop Invariant}\\
+1. minPath contains the shortest path out of all the maze states using one plank formed so far (clarification: these are the copied maze with the plank put down).\\
+2.all of the possible maze states using one plank are not examined yet.\\
+conceptually, no path means that it is a path of infinite length, which is represented in this algorithm by having a null path.\\
+\textbf{Initialization}\\
+\textbf{Basis}\\
+When the original maze (no plank put down) is traversed, it is the only path out of all the maze states using one plank formed so far. Thus it is trivially the shortest path.\\
+\textbf{Maintenance}\\
+Assume minPath contains the shortest path before the ith iteration.\\
+At ith iteration, minPath is compared to plankPath (which is the path found in the new maze state using one plank) and the smaller one is put into minPath.\\
+\textbf{Termination}\\
+The loop terminates when there are no more possible maze states using one plank not yet examined.\\
+Thus, minPath contains the smallest path out of all possible maze states using one plank.\\
+
+\paragraph{Runtime analysis}
+In the worst case, the entire maze grid has to be looked at, resulting in $O(n^2)$ for the loooking at the entire grid. 
+The worst case running time for BFS is $O(E+V)$. There are $n^2$ amount of vertex in a n by n square grid. Also, there are $2n^2 -2$ amount of edges in a n by n square grid. The addition os E+V is $2n^2-2+n^2$, which is equal to $3n^2-2$.\\
+This means that the running time of BFS in a n by n square grid is $O(n^2)$.\\
+Thus, the overall worst case running time for this loop is $O(n^4)$.
+
+\end{document}
